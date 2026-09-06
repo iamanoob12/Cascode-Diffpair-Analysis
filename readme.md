@@ -41,8 +41,9 @@ Diffpair/
 ├── Nmos/
 │   ├── bulkfloat.spice      # NMOS operating-point parameters
 │   └── log.txt              # Saved NMOS results used for sizing
-└── Pmos/
-		└── pmos.spice           # PMOS operating-point parameters
+│── Pmos/
+│	└── pmos.spice           # PMOS operating-point parameters
+└── readme.md				 # Here !!! 
 ```
 
 ## Circuit overview
