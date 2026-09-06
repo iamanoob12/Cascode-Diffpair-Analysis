@@ -1,0 +1,60 @@
+*** Cascode Diffpair Amplifier - AC ***
+
+.param scale_n1 = '2m / 3.59734e-04'
+.param scale_n2 = '2m / 3.71917e-04'
+.param scale_p =  '2m / 1.368662e-04'
+
+* Include PDK model library
+.lib "/usr/local/share/pdk/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice" tt
+
+* Power
+Vdd Vdd 0 DC 1.8
+Vb1 Vb1 0 DC 0.35
+Vb2 Vb2 0 DC -0.15
+Vb3 Vb3 0 DC 1.59
+Vin1 Vin+ 0 DC 1.245 AC 0.5
+Vin2 Vin- 0 DC 1.245 AC -0.5
+Itail Nbias 0 DC 4m
+
+*** Circuit ***
+XP1 Vdd Vb1 N11 Vdd MY_PFET m='scale_p'
+XP2 N11 Vb2 Vout_p N11 MY_PFET m='scale_p'
+XN1 Vout_p Vb3 N12 0 MY_NFET m='scale_n2'
+XN2 N12 Vin+ Nbias 0 MY_NFET m='scale_n1' 
+
+XP3 Vdd Vb1 N21 Vdd MY_PFET m='scale_p'
+XP4 N21 Vb2 Vout_n N11 MY_PFET m='scale_p'
+XN3 Vout_n Vb3 N22 0 MY_NFET m='scale_n2'
+XN4 N22 Vin- Nbias 0 MY_NFET m='scale_n1'
+
+* Parameterized Subcircuits
+.subckt MY_NFET Vd Vg Vs Vb W_val=5 L_val=0.15
+   XMN Vd Vg Vs Vb sky130_fd_pr__nfet_01v8 w='W_val' l='L_val' nf=1 ad=1.45 as=1.45 pd=10.58 ps=10.58 nrd=0.058 nrs=0.058 sa=0 sb=0 sd=0 mult=1
+.ends MY_NFET
+
+.subckt MY_PFET Vs Vg Vd Vb W_val=5 L_val=0.30
+   XMP Vd Vg Vs Vb sky130_fd_pr__pfet_01v8 w='W_val' l='L_val' nf=1 ad=1.45 as=1.45 pd=10.58 ps=10.58 nrd=0.058 nrs=0.058 sa=0 sb=0 sd=0 mult=1 
+.ends MY_PFET
+
+.control
+   ac dec 100 1 1G
+   set units = degrees
+
+   * 1. Calculate differential AC voltage vector directly
+   let vdiff = v(vout_p) - v(vout_n)
+
+   * 2. Convert complex vector to dB
+   let diff_gain = db(vdiff)
+
+   * 3. Extract low-frequency gain and 3dB roll-off target
+   let gain_dc = diff_gain[0]
+   let target_3db = gain_dc - 3.01
+
+   * 4. Measure dominant pole
+   meas ac f_p1 when diff_gain=target_3db fall=1
+
+   plot diff_gain
+   plot ph(vdiff)
+.endc
+
+.end
