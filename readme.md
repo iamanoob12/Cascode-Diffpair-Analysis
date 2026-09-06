@@ -122,11 +122,39 @@ The script discovers every `.txt` file in `MosLoad/data/`, reads paired frequenc
 MosLoad/PythonPlot/plots.png
 ```
 
+The resulting plots are shown below:
+
+![Differential-mode gain, common-mode gain, and CMRR](MosLoad/PythonPlot/plots.png)
+
 The generated files contain:
 
 - `diff.txt`: differential-mode gain and phase
 - `cm.txt`: common-mode gain and phase
 - `cmrr.txt`: CMRR in dB
+
+The plotting script labels each exported pair by its column numbers. For
+`diff.txt` and `cm.txt`, the first pair is gain magnitude in dB and the
+second pair is phase in degrees. `cmrr.txt` contains the CMRR curve as one
+frequency/value pair. The script uses the file stem as the subplot title and
+labels the y-axis generically as `Magnitude` because the exported files mix
+gain, phase, and CMRR quantities.
+
+## Interpreting the plotted results
+
+The generated plots show the expected behavior of the cascode differential
+pair with an NMOS tail load:
+
+- Differential-mode gain is approximately 180 dB at low frequency and rolls
+	off near the high-frequency limit of the sweep.
+- Common-mode gain is strongly suppressed at low frequency. It rises toward
+	0 dB as frequency increases, indicating reduced common-mode rejection at
+	high frequency.
+- CMRR is approximately 158 dB at low frequency and decreases to about 20 dB
+	near 1 GHz as the differential and common-mode responses converge.
+
+The phase traces wrap at the `-180`/`+180` degree boundary, which explains the
+vertical jump visible in the `cm` plot. This is a phase-display discontinuity,
+not a corresponding discontinuity in the circuit response.
 
 ## Notes
 
