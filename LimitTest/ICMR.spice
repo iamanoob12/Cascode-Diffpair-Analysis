@@ -1,0 +1,57 @@
+*** Cascode Diffpair Amplifier - AC ***
+
+.param scale_n1 = '2m / 3.59734e-04'
+.param scale_n2 = '2m / 3.71917e-04'
+.param scale_nload = '4m / 1.13377e-04'
+.param scale_p =  '2m / 1.368662e-04'
+
+* Include PDK model library
+.lib "/usr/local/share/pdk/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice" tt
+
+* Power
+Vdd Vdd 0 DC 1.8
+Vb1 Vb1 0 DC 0.35
+Vb2 Vb2 0 DC -0.15
+Vb3 Vb3 0 DC 1.59
+Vin Vcm 0 DC 1.245
+Vb   Vb  0 DC 0.9
+
+*** Circuit ***
+XP1 Vdd Vb1 N11 Vdd MY_PFET m='scale_p'
+XP2 N11 Vb2 Vout_p N11 MY_PFET m='scale_p'
+XN2 Vout_p Vb3 N12 0 MY_NFET m='scale_n2'
+XN1 N12 Vcm Nbias 0 MY_NFET m='scale_n1' 
+
+XP3 Vdd Vb1 N21 Vdd MY_PFET m='scale_p'
+XP4 N21 Vb2 Vout_n N11 MY_PFET m='scale_p'
+XN4 Vout_n Vb3 N22 0 MY_NFET m='scale_n2'
+XN3 N22 Vcm Nbias 0 MY_NFET m='scale_n1'
+
+XNload Nbias Vb 0 0 MY_NFET W_val=5 L_val=0.30 m='scale_nload'
+
+* Parameterized Subcircuits
+.subckt MY_NFET Vd Vg Vs Vb W_val=5 L_val=0.15
+   XMN Vd Vg Vs Vb sky130_fd_pr__nfet_01v8 w='W_val' l='L_val' nf=1 ad=1.45 as=1.45 pd=10.58 ps=10.58 nrd=0.058 nrs=0.058 sa=0 sb=0 sd=0 mult=1
+.ends MY_NFET
+
+.subckt MY_PFET Vs Vg Vd Vb W_val=5 L_val=0.30
+   XMP Vd Vg Vs Vb sky130_fd_pr__pfet_01v8 w='W_val' l='L_val' nf=1 ad=1.45 as=1.45 pd=10.58 ps=10.58 nrd=0.058 nrs=0.058 sa=0 sb=0 sd=0 mult=1 
+.ends MY_PFET
+
+.control
+   dc Vin 0 1.8 0.01
+   let vds = v(n12) - v(nbias)
+   let vgs = v(vcm) - v(nbias)
+   let Vth = @m.xn1.xmn.msky130_fd_pr__nfet_01v8[vth]
+   let vov = vgs - Vth
+
+   let vds2 = v(vout_p) - v(n12)
+   let vgs2 = v(vb3) - v(n12)
+   let Vth2 = @m.xn2.xmn.msky130_fd_pr__nfet_01v8[vth]
+   let vov2 = vgs2 - Vth2
+
+   wrdata ./Data/ICMR.txt vds vov vds2 vov2
+   quit
+.endc
+
+.end

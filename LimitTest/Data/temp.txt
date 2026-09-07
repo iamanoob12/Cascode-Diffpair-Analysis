@@ -1,0 +1,4 @@
+-40 Celcius broke
+ 27 Celcius normal
+ 85 Celcius 14 dB gain
+125 Celcius 10 dB gain

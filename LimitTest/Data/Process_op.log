@@ -1,0 +1,79 @@
+
+Note: Compatibility modes selected: hs a
+
+Warning: m=xx on .subckt line will override multiplier m hierarchy!
+
+
+Circuit: *** cascode diffpair amplifier - ac ***
+
+option SCALE: Scale is set to 1e-06 for instance and model parameters
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 1
+@m.xp1.xmp.msky130_fd_pr__pfet_01v8[id] = 1.441451e-03
+@m.xp1.xmp.msky130_fd_pr__pfet_01v8[vth] = 9.747581e-01
+@m.xp1.xmp.msky130_fd_pr__pfet_01v8[vds] = 4.114390e-01
+@m.xp1.xmp.msky130_fd_pr__pfet_01v8[vdsat] = 4.215758e-01
+@m.xp2.xmp.msky130_fd_pr__pfet_01v8[id] = 1.441451e-03
+@m.xp2.xmp.msky130_fd_pr__pfet_01v8[vth] = 9.758767e-01
+@m.xp2.xmp.msky130_fd_pr__pfet_01v8[vds] = 2.543501e-01
+@m.xp2.xmp.msky130_fd_pr__pfet_01v8[vdsat] = 4.861779e-01
+@m.xn2.xmn.msky130_fd_pr__nfet_01v8[id] = 1.441451e-03
+@m.xn2.xmn.msky130_fd_pr__nfet_01v8[vth] = 7.833093e-01
+@m.xn2.xmn.msky130_fd_pr__nfet_01v8[vds] = 3.180037e-01
+@m.xn2.xmn.msky130_fd_pr__nfet_01v8[vdsat] = 1.913256e-01
+@m.xn1.xmn.msky130_fd_pr__nfet_01v8[id] = 1.441451e-03
+@m.xn1.xmn.msky130_fd_pr__nfet_01v8[vth] = 8.340902e-01
+@m.xn1.xmn.msky130_fd_pr__nfet_01v8[vds] = 6.133683e-01
+@m.xn1.xmn.msky130_fd_pr__nfet_01v8[vdsat] = 1.860136e-01
+m.xn1.xmn.msky130_fd_pr__nfet_01v8#body = 2.081448e-11
+m.xn1.xmn.msky130_fd_pr__nfet_01v8#dbody = 3.888879e-11
+m.xn1.xmn.msky130_fd_pr__nfet_01v8#sbody = 2.355458e-11
+m.xn2.xmn.msky130_fd_pr__nfet_01v8#body = 9.171383e-12
+m.xn2.xmn.msky130_fd_pr__nfet_01v8#dbody = 1.773227e-11
+m.xn2.xmn.msky130_fd_pr__nfet_01v8#sbody = 9.781879e-12
+m.xn3.xmn.msky130_fd_pr__nfet_01v8#body = 2.081448e-11
+m.xn3.xmn.msky130_fd_pr__nfet_01v8#dbody = 3.888879e-11
+m.xn3.xmn.msky130_fd_pr__nfet_01v8#sbody = 2.355458e-11
+m.xn4.xmn.msky130_fd_pr__nfet_01v8#body = 9.171383e-12
+m.xn4.xmn.msky130_fd_pr__nfet_01v8#dbody = 1.773227e-11
+m.xn4.xmn.msky130_fd_pr__nfet_01v8#sbody = 9.781879e-12
+m.xnload.xmn.msky130_fd_pr__nfet_01v8#body = 2.597917e-12
+m.xnload.xmn.msky130_fd_pr__nfet_01v8#dbody = 6.494651e-12
+m.xnload.xmn.msky130_fd_pr__nfet_01v8#sbody = 1.299095e-12
+m.xp1.xmp.msky130_fd_pr__pfet_01v8#body = 1.800000e+00
+m.xp1.xmp.msky130_fd_pr__pfet_01v8#dbody = 1.800000e+00
+m.xp1.xmp.msky130_fd_pr__pfet_01v8#sbody = 1.800000e+00
+m.xp2.xmp.msky130_fd_pr__pfet_01v8#body = 1.388550e+00
+m.xp2.xmp.msky130_fd_pr__pfet_01v8#dbody = 1.388550e+00
+m.xp2.xmp.msky130_fd_pr__pfet_01v8#sbody = 1.388550e+00
+m.xp3.xmp.msky130_fd_pr__pfet_01v8#body = 1.800000e+00
+m.xp3.xmp.msky130_fd_pr__pfet_01v8#dbody = 1.800000e+00
+m.xp3.xmp.msky130_fd_pr__pfet_01v8#sbody = 1.800000e+00
+m.xp4.xmp.msky130_fd_pr__pfet_01v8#body = 1.388550e+00
+m.xp4.xmp.msky130_fd_pr__pfet_01v8#dbody = 1.388550e+00
+m.xp4.xmp.msky130_fd_pr__pfet_01v8#sbody = 1.388550e+00
+n11 = 1.388550e+00
+n12 = 5.207886e-01
+n21 = 1.388550e+00
+n22 = 5.207886e-01
+nbias = 2.027549e-01
+vb = 9.000000e-01
+vb#branch = 0.000000e+00
+vb1 = 3.500000e-01
+vb1#branch = 0.000000e+00
+vb2 = -1.50000e-01
+vb2#branch = 0.000000e+00
+vb3 = 1.590000e+00
+vb3#branch = 0.000000e+00
+vdd = 1.800000e+00
+vdd#branch = -2.88290e-03
+vin+ = 1.245000e+00
+vin- = 1.245000e+00
+vin1#branch = 0.000000e+00
+vin2#branch = 0.000000e+00
+vout_n = 1.134188e+00
+vout_p = 1.134188e+00
+Note: Simulation executed from .control section 
