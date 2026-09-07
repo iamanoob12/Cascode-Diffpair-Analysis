@@ -163,7 +163,7 @@ gain, phase, and CMRR quantities.
 The generated plots show the expected behavior of the cascode differential
 pair with an NMOS tail load:
 
-- Differential-mode gain is approximately 180 dB at low frequency and rolls
+- Differential-mode gain is approximately 30 dB at low frequency and rolls
 	off near the high-frequency limit of the sweep.
 - Common-mode gain is strongly suppressed at low frequency. It rises toward
 	0 dB as frequency increases, indicating reduced common-mode rejection at
