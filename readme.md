@@ -4,6 +4,10 @@ This repository contains ngspice netlists for exploring MOSFET operating points 
 
 The examples progress from individual NMOS and PMOS devices to an ideal-tail cascode differential pair, and finally to a version with an NMOS current-source tail load. The final circuit includes differential-mode gain, common-mode gain, and CMRR analysis.
 
+The `LimitTest/` directory extends the project with limit and robustness tests
+for input common-mode range, power-supply rejection, slew rate, output swing,
+temperature, and process variation.
+
 ## Requirements
 
 - ngspice
@@ -41,9 +45,24 @@ Diffpair/
 ├── Nmos/
 │   ├── bulkfloat.spice      # NMOS operating-point parameters
 │   └── log.txt              # Saved NMOS results used for sizing
-│── Pmos/
-│	└── pmos.spice           # PMOS operating-point parameters
-└── readme.md				 # Here !!! 
+├── Pmos/
+		└── pmos.spice           # PMOS operating-point parameters
+└── LimitTest/
+	├── ICMR.spice           # Input common-mode range test
+	├── PSRR.spice           # Power-supply rejection test
+	├── ProcessCorner.spice  # Slow process-corner operating point
+	├── SlewRate.spice       # Transient slew-rate test with load capacitors
+	├── Swing.spice          # Output-swing/headroom test
+	├── ideal.spice          # Operating-point and AC sanity check
+	├── temp.spice           # Temperature test at 125 C
+	└── Data/                # Saved measurements and ngspice logs
+		├── ICMR.txt
+		├── PSRR.txt
+		├── SlewRate.txt
+		├── Swing.txt
+		├── temp.txt
+		├── Process_op.log
+		└── ideal.log
 ```
 
 ## Circuit overview
@@ -155,6 +174,43 @@ pair with an NMOS tail load:
 The phase traces wrap at the `-180`/`+180` degree boundary, which explains the
 vertical jump visible in the `cm` plot. This is a phase-display discontinuity,
 not a corresponding discontinuity in the circuit response.
+
+## Limit and robustness tests
+
+Run these tests from `/path/to/Diffpair/Diffpair`, where `LimitTest/` is
+available:
+
+```bash
+ngspice -b LimitTest/ICMR.spice -o LimitTest/Data/ICMR.out
+ngspice -b LimitTest/PSRR.spice -o LimitTest/Data/PSRR.out
+ngspice -b LimitTest/SlewRate.spice -o LimitTest/Data/SlewRate.out
+ngspice -b LimitTest/Swing.spice -o LimitTest/Data/Swing.out
+ngspice -b LimitTest/temp.spice -o LimitTest/Data/temp.out
+ngspice -b LimitTest/ProcessCorner.spice -o LimitTest/Data/ProcessCorner.out
+ngspice -b LimitTest/ideal.spice -o LimitTest/Data/ideal.out
+```
+
+The tests cover the following behaviors:
+
+- `ICMR.spice` sweeps the common-mode input from 0 V to 1.8 V and writes the
+	input-device and cascode-device voltage headroom quantities to `ICMR.txt`.
+- `PSRR.spice` compares differential-mode gain with supply modulation and
+	writes PSRR to `PSRR.txt`. The checked-in result starts near 144 dB.
+- `SlewRate.spice` applies a 400 mV input step, adds 10 pF capacitors to both
+	outputs, and measures the rising slew interval as `sr_rise`.
+- `Swing.spice` sweeps an output test voltage and checks device overdrive and
+	drain-source headroom. Its saved note records nearly zero swing for the
+	selected bias condition.
+- `temp.spice` runs the circuit at 125 C. The saved notes record normal
+	operation at 27 C, reduced gain at 85 C and 125 C, and failure at -40 C.
+- `ProcessCorner.spice` uses the SKY130 `ss` corner and prints device current,
+	threshold voltage, drain-source voltage, and saturation voltage.
+- `ideal.spice` prints the operating point and compares differential- and
+	common-mode AC responses as a sanity check.
+
+The text outputs in `LimitTest/Data/` are generated artifacts. Re-run the
+corresponding netlist when changing the circuit, device sizing, model corner,
+temperature, or test conditions.
 
 ## Notes
 

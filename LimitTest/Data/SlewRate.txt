@@ -1,0 +1,3 @@
+0 sr_rise             =  6.184854e-11 targ=  1.117645e-07 trig=  1.117027e-07
+1 sr_rise             =  1.473548e-10 targ=  1.124432e-07 trig=  1.122958e-07
+10 sr_rise             =  1.254634e-09 targ=  1.185398e-07 trig=  1.172851e-07 for Cload = 10p
