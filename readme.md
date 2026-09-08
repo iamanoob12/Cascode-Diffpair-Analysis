@@ -212,6 +212,54 @@ The text outputs in `LimitTest/Data/` are generated artifacts. Re-run the
 corresponding netlist when changing the circuit, device sizing, model corner,
 temperature, or test conditions.
 
+## Key findings
+
+Across the limit tests, a single root cause shows up repeatedly: the bias
+voltages (`Vb1`, `Vb2`, `Vb3`) are fixed DC values, calculated once at the
+`tt` corner with each device's overdrive set approximately equal to its
+`Vds` (`Vov ≈ Vds`), leaving essentially zero saturation margin at the
+nominal operating point.
+
+- **ICMR (~0.75 V–1.24 V):** The lower bound is set by the input NMOS
+  approaching cutoff as `Vov → 0`. The upper bound is set by the cascode
+  NMOS entering triode, marginally before the input device — both edges
+  are direct consequences of the zero-margin bias choice rather than a
+  device limitation.
+- **Output swing (near zero):** Swing is bounded by five stacked devices
+  (PMOS load, PMOS cascode, NMOS cascode, NMOS input, tail current source)
+  each consuming their designed overdrive from the same 1.8 V supply. With
+  no spare headroom budgeted per device, the theoretical swing works out
+  to approximately 0 V, matching the near-zero margin observed in
+  simulation.
+- **Process corners (`ss`):** At the slow corner, higher threshold
+  voltages shrink every device's overdrive relative to the fixed gate
+  bias. The PMOS cascode (`XP2`) is the first to fail, dropping into deep
+  triode (`Vds` roughly half of `Vdsat`). The top PMOS current source
+  (`XP1`) sits right at its saturation boundary but does not fully fail,
+  since cascode devices carry less independent headroom than devices at
+  the top of the stack. Beside, the tail Nmos failed to produce 4mA thus
+  downgrading the system
+- **Temperature (-40 °C to 125 °C):** Gain decreases monotonically from
+  27 °C to 125 °C as carrier mobility degradation outweighs the
+  threshold-voltage shift. At -40 °C, however, gain collapses far more
+  sharply than the high-temperature trend would suggest, consistent with
+  the same fixed-bias/threshold-shift mechanism seen in the `ss` corner
+  test, now driven by temperature instead of process.
+- **Slew rate:** Measured transition time scales consistently with load
+  capacitance (approximately 10x longer transition at 10 pF versus 1 pF),
+  confirming the expected `SR = I_tail / C_load` relationship rather than
+  an artifact of the simulation setup.
+
+**Takeaway:** every limit test failure traces back to the same design
+decision — biasing each device at minimum overdrive maximizes nominal
+gain and area efficiency, but leaves no margin against any deviation from
+nominal conditions (input voltage, output voltage, process corner, or
+temperature). A self-biased (diode-connected mirror) bias generation
+scheme, which tracks threshold-voltage shifts automatically, is the
+natural next step for improving robustness without sacrificing the
+nominal-condition performance already characterized here.
+
+
 ## Notes
 
 - The output node names differ between the ideal DC/AC netlists (`Vout+`, `Vout-`) and the AC netlist's internal aliases (`vout_p`, `vout_n`). Use the node names defined by the netlist when extending the simulations.
